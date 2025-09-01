@@ -1,36 +1,80 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "../hooks/useWallet";
-import { Wallet, ExternalLink, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import {
+  Wallet,
+  ExternalLink,
+  AlertCircle,
+  CheckCircle,
+  Loader2,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useRef, useEffect, useState } from "react";
 
 export const WalletCard = () => {
-  const { 
-    address, 
-    isConnected, 
-    isConnecting, 
-    error, 
-    chainId, 
+  const {
+    address,
+    isConnected,
+    isConnecting,
+    error,
+    chainId,
     balance,
-    connect, 
-    disconnect, 
-    isMetamaskInstalled 
+    connect,
+    disconnect,
+    isMetamaskInstalled,
   } = useWallet();
+  const [animatedBalance, setAnimatedBalance] = useState(balance || "0");
+  const prevBalanceRef = useRef(balance);
 
-  // TODO: Implement address formatting
+  // ✅ Implement address formatting
   const formatAddress = (addr: string): string => {
-    // Implementation needed: Format address to show first 6 and last 4 characters
-    // Example: "0x1234...abcd"
-    return addr; // Placeholder
+    // Format address to show first 6 and last 4 characters
+    return addr.slice(0, 6) + "..." + addr.slice(-4);
   };
 
-  // TODO: Implement chain name mapping
+  // ✅ Implement chain name mapping
   const getChainName = (id: string): string => {
-    // Implementation needed: Map chain IDs to human-readable names
-    // Common chains: 0x1 (Ethereum), 0x5 (Goerli), 0xaa36a7 (Sepolia)
-    return `Chain ${id}`; // Placeholder
+    // Map chain IDs to human-readable names
+    const chainMap: Record<string, string> = {
+      "1": "Ethereum Mainnet",
+      "5": "Goerli Testnet",
+      "11155111": "Sepolia Testnet",
+    };
+    return chainMap[id] || `Chain ${id}`;
   };
+
+  useEffect(() => {
+    if (!balance) return;
+
+    const start = parseFloat(prevBalanceRef.current || "0");
+    const end = parseFloat(balance);
+    const duration = 500; 
+    const increment = (end - start) / 20;
+
+    let current = start;
+    const interval = setInterval(() => {
+      current += increment;
+      if (
+        (increment > 0 && current >= end) ||
+        (increment < 0 && current <= end)
+      ) {
+        setAnimatedBalance(balance);
+        clearInterval(interval);
+        prevBalanceRef.current = balance; 
+      } else {
+        setAnimatedBalance(current.toFixed(4));
+      }
+    }, duration / 20);
+
+    return () => clearInterval(interval);
+  }, [balance]);
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -44,16 +88,16 @@ export const WalletCard = () => {
             Connect your MetaMask wallet to get started
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {!isMetamaskInstalled && (
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
                 MetaMask not detected. Please{" "}
-                <a 
-                  href="https://metamask.io/download/" 
-                  target="_blank" 
+                <a
+                  href="https://metamask.io/download/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline inline-flex items-center gap-1"
                 >
@@ -74,29 +118,44 @@ export const WalletCard = () => {
           {isConnected && address && (
             <div className="space-y-3 rounded-lg bg-muted/30 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Status</span>
-                <Badge variant="default" className="bg-gradient-success text-white">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Status
+                </span>
+                <Badge
+                  variant="default"
+                  className="bg-gradient-success text-white"
+                >
                   <CheckCircle className="mr-1 h-3 w-3" />
                   Connected
                 </Badge>
               </div>
-              
+
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Address</span>
-                <code className="text-sm font-mono">{formatAddress(address)}</code>
+                <span className="text-sm font-medium text-muted-foreground">
+                  Address
+                </span>
+                <code className="text-sm font-mono">
+                  {formatAddress(address)}
+                </code>
               </div>
-              
+
               {chainId && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-muted-foreground">Network</span>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Network
+                  </span>
                   <span className="text-sm">{getChainName(chainId)}</span>
                 </div>
               )}
-              
-              {balance && (
+
+              {animatedBalance && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-muted-foreground">Balance</span>
-                  <span className="text-sm font-mono">{balance} ETH</span>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Balance
+                  </span>
+                  <span className="text-sm font-mono">
+                    {animatedBalance} ETH
+                  </span>
                 </div>
               )}
             </div>
@@ -104,7 +163,7 @@ export const WalletCard = () => {
 
           <div className="flex gap-2">
             {!isConnected ? (
-              <Button 
+              <Button
                 onClick={connect}
                 disabled={!isMetamaskInstalled || isConnecting}
                 className="flex-1 bg-gradient-crypto hover:shadow-glow transition-all duration-200"
@@ -122,11 +181,7 @@ export const WalletCard = () => {
                 )}
               </Button>
             ) : (
-              <Button 
-                variant="outline" 
-                onClick={disconnect}
-                className="flex-1"
-              >
+              <Button variant="outline" onClick={disconnect} className="flex-1">
                 Disconnect
               </Button>
             )}

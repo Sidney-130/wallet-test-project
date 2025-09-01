@@ -3,7 +3,7 @@ import { TestInstructions } from "../components/TestInstructions";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black text-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -21,15 +21,16 @@ const Index = () => {
           <div>
             <TestInstructions />
           </div>
-          
+
           {/* Wallet Connection */}
           <div className="space-y-6">
             <WalletCard />
-            
+
             {/* Additional Info */}
             <div className="text-center text-sm text-muted-foreground">
               <p>
-                Make sure you have MetaMask installed and are on a supported network.
+                Make sure you have MetaMask installed and are on a supported
+                network.
               </p>
               <p className="mt-1">
                 Test on Ethereum Mainnet, Goerli, or Sepolia for best results.

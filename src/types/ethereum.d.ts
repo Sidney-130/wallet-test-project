@@ -1,10 +1,11 @@
-interface EthereumProvider {
-  request(args: { method: string; params?: any[] }): Promise<any>;
-  on(eventName: string, handler: (...args: any[]) => void): void;
-  removeListener?(eventName: string, handler: (...args: any[]) => void): void;
-  selectedAddress?: string;
-  chainId?: string;
+export interface EthereumProvider {
   isMetaMask?: boolean;
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+  on: (event: string, callback: (...args: unknown[]) => void) => void;
+  removeListener: (
+    event: string,
+    callback: (...args: unknown[]) => void
+  ) => void;
 }
 
 declare global {
@@ -12,5 +13,3 @@ declare global {
     ethereum?: EthereumProvider;
   }
 }
-
-export {};
