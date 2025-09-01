@@ -9,23 +9,27 @@ This is a **60-minute coding challenge** designed to test a developer's ability 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - MetaMask browser extension
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd metamask-integration-test
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -35,6 +39,7 @@ npm run dev
 ## 📋 Test Instructions
 
 ### Objective
+
 Implement MetaMask wallet connection functionality within **60 minutes**.
 
 ### Required Features ✅
@@ -42,7 +47,7 @@ Implement MetaMask wallet connection functionality within **60 minutes**.
 You need to implement the following core features:
 
 - [ ] **Connect MetaMask Wallet** - Allow users to connect their MetaMask wallet
-- [ ] **Disconnect Wallet** - Allow users to disconnect their wallet  
+- [ ] **Disconnect Wallet** - Allow users to disconnect their wallet
 - [ ] **Display Wallet Address** - Show the connected wallet address (formatted)
 - [ ] **Show Balance** - Display ETH balance of the connected wallet
 - [ ] **Error Handling** - Handle common errors (no MetaMask, user rejection, etc.)
@@ -99,33 +104,38 @@ src/
 ## 🧪 Implementation Guide
 
 ### 1. MetaMask Detection
+
 ```typescript
 // Check if MetaMask is installed
-const isMetamaskInstalled = typeof window !== 'undefined' && typeof window.ethereum !== 'undefined';
+const isMetamaskInstalled =
+  typeof window !== "undefined" && typeof window.ethereum !== "undefined";
 ```
 
 ### 2. Connect Wallet
+
 ```typescript
 // Request account access
 const accounts = await window.ethereum.request({
-  method: 'eth_requestAccounts',
+  method: "eth_requestAccounts",
 });
 ```
 
 ### 3. Get Balance
+
 ```typescript
 // Get ETH balance
 const balance = await window.ethereum.request({
-  method: 'eth_getBalance',
-  params: [address, 'latest'],
+  method: "eth_getBalance",
+  params: [address, "latest"],
 });
 ```
 
 ### 4. Handle Events
+
 ```typescript
 // Listen for account changes
-window.ethereum.on('accountsChanged', handleAccountsChanged);
-window.ethereum.on('chainChanged', handleChainChanged);
+window.ethereum.on("accountsChanged", handleAccountsChanged);
+window.ethereum.on("chainChanged", handleChainChanged);
 ```
 
 ## 🧪 Testing Guidelines
@@ -133,15 +143,18 @@ window.ethereum.on('chainChanged', handleChainChanged);
 ### Manual Testing Scenarios
 
 1. **MetaMask Not Installed**
+
    - Test the app without MetaMask extension
    - Should display appropriate error message
 
 2. **Connection Flow**
+
    - Click "Connect Wallet" button
    - Accept connection in MetaMask popup
    - Verify wallet information displays correctly
 
 3. **Error Handling**
+
    - Reject connection request
    - Test with MetaMask locked
    - Switch accounts in MetaMask
@@ -186,15 +199,18 @@ The app should work with:
 ## 🚨 Common Issues & Solutions
 
 ### MetaMask Connection Issues
+
 - Ensure MetaMask is unlocked
 - Check if the website is connected in MetaMask settings
 - Try refreshing the page
 
 ### Type Errors
+
 - The project includes proper TypeScript declarations for MetaMask
 - Use the provided types in `src/types/` for type safety
 
 ### Network Issues
+
 - Some features may not work on localhost
 - Use browser DevTools to debug console errors
 
@@ -208,3 +224,6 @@ When submitting your solution:
 4. Include any assumptions or design decisions made
 
 Good luck! 🚀
+
+From Jane,
+Thank you for this oppotunity, I have completed the wallet connections, based on the requirements. The codes have comments to help understand what I did. The wallet connects with metamask and can support Linea test newtwork, ethereum mainnet and sepoila test network.
