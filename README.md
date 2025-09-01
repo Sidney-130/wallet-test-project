@@ -226,4 +226,4 @@ When submitting your solution:
 Good luck! 🚀
 
 From Jane,
-Thank you for this oppotunity, I have completed the wallet connections, based on the requirements. The codes have comments to help understand what I did. The wallet connects with metamask and can support Linea test newtwork, ethereum mainnet and sepoila test network.
+Thank you for this oppotunity, I have completed the wallet connections, based on the requirements. The codes have comments to help understand what I did. The wallet connects with metamask and can support Linea test network, ethereum mainnet and sepoila test network.
